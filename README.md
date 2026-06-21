@@ -1,1 +1,1 @@
-Enjoy playing peak Ball !
+Enjoy playing Peak Ball !
