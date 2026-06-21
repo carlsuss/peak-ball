@@ -1,0 +1,1576 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Peak Ball — Learning Hub</title>
+  <meta name="description" content="Peak Ball English learning website: lessons, quizzes, progress tracking, and practice tools." />
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.09);
+      --text:#eaf0ff;
+      --muted: rgba(234,240,255,.7);
+      --brand:#6ee7ff;
+      --brand2:#a78bfa;
+      --ok:#22c55e;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+      --border: rgba(255,255,255,.14);
+      --shadow: 0 14px 40px rgba(0,0,0,.35);
+      --radius: 16px;
+      --radius2: 22px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background:
+        radial-gradient(1200px 600px at 15% 10%, rgba(110,231,255,.22), transparent 55%),
+        radial-gradient(900px 500px at 85% 15%, rgba(167,139,250,.22), transparent 52%),
+        radial-gradient(700px 500px at 50% 95%, rgba(34,197,94,.10), transparent 55%),
+        linear-gradient(180deg, #070a14 0%, var(--bg) 100%);
+      color:var(--text);
+      min-height:100vh;
+    }
+    a{color:inherit}
+    .wrap{
+      width:min(1100px, 92vw);
+      margin: 0 auto;
+      padding: 22px 0 50px;
+    }
+
+    /* Top bar */
+    .topbar{
+      position: sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(10px);
+      background: rgba(11,16,32,.55);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .topbar-inner{
+      width:min(1100px, 92vw);
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 14px 0;
+      gap:14px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width: 260px;
+    }
+    .logo{
+      width:42px;height:42px;border-radius:14px;
+      background: linear-gradient(135deg, rgba(110,231,255,.95), rgba(167,139,250,.95));
+      box-shadow: 0 10px 30px rgba(110,231,255,.18);
+      display:grid;place-items:center;
+      border: 1px solid rgba(255,255,255,.25);
+      position:relative;
+      overflow:hidden;
+    }
+    .logo:before{
+      content:"";
+      position:absolute; inset:-40%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 45%);
+      transform: rotate(25deg);
+    }
+    .logo span{
+      position:relative;
+      font-weight:900;
+      letter-spacing:.5px;
+      color:#08101f;
+      text-shadow:none;
+    }
+    .brand h1{
+      margin:0;
+      font-size:15px;
+      line-height:1.1;
+      letter-spacing:.2px;
+    }
+    .brand p{
+      margin:3px 0 0;
+      font-size:12px;
+      color: var(--muted);
+    }
+
+    .nav{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .nav button{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      padding: 9px 12px;
+      border-radius: 999px;
+      cursor:pointer;
+      transition:.2s ease;
+      font-weight:650;
+      font-size: 13px;
+    }
+    .nav button:hover{ transform: translateY(-1px); border-color: rgba(110,231,255,.35); }
+    .nav button[aria-current="page"]{
+      border-color: rgba(110,231,255,.65);
+      background: rgba(110,231,255,.10);
+      box-shadow: 0 8px 25px rgba(110,231,255,.12);
+    }
+
+    /* Hero */
+    .hero{
+      display:grid;
+      grid-template-columns: 1.25fr .85fr;
+      gap:18px;
+      margin-top: 18px;
+    }
+    @media (max-width: 900px){
+      .hero{ grid-template-columns: 1fr; }
+      .brand{min-width: unset;}
+    }
+
+    .card{
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .hero-main{
+      padding: 22px 22px 18px;
+      position:relative;
+    }
+    .hero-main:after{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      background:
+        radial-gradient(700px 220px at 20% 0%, rgba(110,231,255,.18), transparent 60%),
+        radial-gradient(680px 240px at 85% 10%, rgba(167,139,250,.18), transparent 60%);
+      pointer-events:none;
+    }
+    .hero-main > *{ position:relative; }
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: var(--muted);
+      font-weight:700;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:999px;
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      box-shadow: 0 0 0 4px rgba(110,231,255,.10);
+    }
+    .hero-title{
+      margin: 0 0 10px;
+      font-size: clamp(26px, 3vw, 40px);
+      line-height:1.1;
+      letter-spacing:-.3px;
+    }
+    .hero-sub{
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height:1.6;
+      max-width: 64ch;
+    }
+    .cta-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 8px;
+    }
+    .btn{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-weight:750;
+      transition:.2s ease;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(110,231,255,.35); }
+    .btn.primary{
+      border-color: rgba(110,231,255,.55);
+      background: linear-gradient(135deg, rgba(110,231,255,.18), rgba(167,139,250,.16));
+      box-shadow: 0 14px 36px rgba(110,231,255,.10);
+    }
+    .btn .pill{
+      font-size:12px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      color: var(--muted);
+      background: rgba(255,255,255,.05);
+      font-family: var(--mono);
+    }
+
+    .hero-side{
+      padding: 18px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .stat-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .stat{
+      padding: 14px 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .stat .label{ color: var(--muted); font-size:12px; font-weight:700; }
+    .stat .value{ font-size:18px; margin-top:6px; font-weight:900; letter-spacing:-.2px; }
+    .progress-wrap{
+      padding: 14px 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .progress-title{
+      display:flex; justify-content:space-between; gap:10px; align-items:center;
+      color: var(--muted);
+      font-weight:700; font-size:12px;
+    }
+    .bar{
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      overflow:hidden;
+      margin-top: 10px;
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .bar > i{
+      display:block;
+      height:100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--brand), var(--brand2));
+      border-radius: 999px;
+      transition: width .35s ease;
+    }
+
+    /* Content area */
+    .grid{
+      display:grid;
+      grid-template-columns: .95fr 1.05fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    @media (max-width: 900px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .section{
+      padding: 16px;
+    }
+    .section h2{
+      margin: 0 0 10px;
+      font-size: 16px;
+      letter-spacing:.2px;
+    }
+    .muted{ color: var(--muted); }
+
+    /* Lesson list */
+    .lesson-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .lesson{
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.10);
+      cursor:pointer;
+      transition:.2s ease;
+    }
+    .lesson:hover{
+      border-color: rgba(110,231,255,.35);
+      transform: translateY(-1px);
+    }
+    .lesson[aria-selected="true"]{
+      border-color: rgba(110,231,255,.70);
+      background: rgba(110,231,255,.08);
+      box-shadow: 0 14px 36px rgba(110,231,255,.10);
+    }
+    .lesson-top{
+      display:flex; justify-content:space-between; gap:10px; align-items:flex-start;
+    }
+    .lesson h3{
+      margin:0;
+      font-size: 14px;
+      letter-spacing:.2px;
+    }
+    .lesson .tag{
+      font-size: 12px;
+      color: rgba(234,240,255,.78);
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-family: var(--mono);
+      white-space:nowrap;
+    }
+    .lesson p{
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.55;
+    }
+
+    /* Lesson detail */
+    .detail-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      margin-bottom: 12px;
+    }
+    .detail-header .left h2{
+      margin:0 0 6px;
+      font-size: 18px;
+    }
+    .detail-header .left .meta{
+      color: var(--muted);
+      font-size: 13px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      padding: 7px 10px;
+      border-radius: 999px;
+      color: rgba(234,240,255,.84);
+      font-weight:700;
+      font-size: 12px;
+    }
+    .badge i{
+      width:9px;height:9px;border-radius:99px;background: var(--brand);
+      box-shadow: 0 0 0 4px rgba(110,231,255,.10);
+      display:inline-block;
+    }
+
+    .content-area{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .panel{
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .panel h3{
+      margin:0 0 8px;
+      font-size: 14px;
+    }
+
+    .vocab{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .word{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .word strong{
+      font-size: 14px;
+      letter-spacing:.2px;
+    }
+    .word .ex{
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height:1.5;
+      margin-top: 4px;
+    }
+    .word .mean{
+      color: rgba(234,240,255,.85);
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 4px 10px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 999px;
+      white-space:nowrap;
+      background: rgba(255,255,255,.04);
+    }
+
+    .example{
+      color: rgba(234,240,255,.9);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+    .example code{
+      font-family: var(--mono);
+      font-size: 13px;
+      color: rgba(234,240,255,.92);
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    /* Quiz */
+    .quiz-q{
+      font-weight:850;
+      letter-spacing:.1px;
+      margin: 0 0 10px;
+      font-size: 14px;
+    }
+    .answers{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+    }
+    .answer{
+      border-radius: 14px;
+      padding: 12px;
+      cursor:pointer;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.03);
+      transition:.2s ease;
+      user-select:none;
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .answer:hover{
+      border-color: rgba(110,231,255,.35);
+      transform: translateY(-1px);
+    }
+    .radio{
+      width:18px;height:18px;border-radius:999px;
+      border: 2px solid rgba(255,255,255,.26);
+      margin-top:2px;
+      flex:0 0 auto;
+      position:relative;
+      background: rgba(255,255,255,.02);
+    }
+    .answer[data-state="correct"]{
+      border-color: rgba(34,197,94,.65);
+      background: rgba(34,197,94,.10);
+    }
+    .answer[data-state="correct"] .radio{
+      border-color: rgba(34,197,94,.8);
+    }
+    .answer[data-state="correct"] .radio:after{
+      content:"";
+      position:absolute; inset:3px;
+      border-radius: 999px;
+      background: rgba(34,197,94,.95);
+    }
+    .answer[data-state="wrong"]{
+      border-color: rgba(239,68,68,.65);
+      background: rgba(239,68,68,.10);
+    }
+    .answer[data-state="wrong"] .radio{
+      border-color: rgba(239,68,68,.85);
+    }
+    .answer[data-state="selected"]{
+      border-color: rgba(110,231,255,.55);
+      background: rgba(110,231,255,.08);
+    }
+
+    .quiz-actions{
+      display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; align-items:center;
+    }
+    .toast{
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .toast strong{ color: var(--text); }
+    .footer-note{
+      color: rgba(234,240,255,.55);
+      font-size: 12.5px;
+      margin-top: 10px;
+      line-height:1.6;
+    }
+
+    /* Hidden sections for navigation */
+    .page{ display:none; }
+    .page.active{ display:block; }
+
+    /* Modal */
+    .modal-backdrop{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index:100;
+    }
+    .modal-backdrop.show{ display:flex; }
+    .modal{
+      width:min(680px, 96vw);
+      border-radius: 18px;
+      background: rgba(15,20,38,.95);
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 30px 90px rgba(0,0,0,.6);
+      overflow:hidden;
+    }
+    .modal-head{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+    }
+    .modal-head h3{
+      margin:0;
+      font-size: 15px;
+      letter-spacing:.2px;
+    }
+    .close-x{
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: var(--text);
+      cursor:pointer;
+      padding: 8px 10px;
+      font-weight:900;
+    }
+    .modal-body{
+      padding: 14px 16px 16px;
+      color: rgba(234,240,255,.86);
+      font-size: 14px;
+      line-height:1.65;
+    }
+    .modal-body ul{ margin: 10px 0 0; padding-left: 18px; }
+    .modal-body li{ margin: 6px 0; color: rgba(234,240,255,.78); }
+    .kbd{
+      font-family: var(--mono);
+      font-size: 12.5px;
+      padding: 3px 8px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: rgba(234,240,255,.9);
+      white-space:nowrap;
+    }
+    .modal-actions{
+      display:flex; gap:10px; flex-wrap:wrap;
+      padding: 0 16px 16px;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar" role="banner">
+    <div class="topbar-inner">
+      <div class="brand" aria-label="Site brand">
+        <div class="logo" aria-hidden="true"><span>PB</span></div>
+        <div>
+          <h1>Peak Ball — Learning Hub</h1>
+          <p>English practice with lessons, vocab, and quizzes.</p>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Primary navigation">
+        <button type="button" data-page="home" aria-current="page">Home</button>
+        <button type="button" data-page="lessons">Lessons</button>
+        <button type="button" data-page="quiz">Quiz</button>
+        <button type="button" data-page="profile">Progress</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" role="main">
+    <!-- HOME -->
+    <section class="page active" id="page-home">
+      <div class="hero">
+        <div class="card hero-main">
+          <div class="kicker"><span class="dot"></span> Learn. Practice. Improve.</div>
+          <h2 class="hero-title">Welcome to <span style="color:var(--brand);font-weight:950">Peak Ball</span></h2>
+          <p class="hero-sub">
+            This is an English learning website inspired by the idea of “Peak Ball”:
+            short lessons, clear vocabulary, and quick quizzes so you can build confidence step by step.
+          </p>
+          <div class="cta-row">
+            <button class="btn primary" type="button" id="btnStart">
+              Start a Lesson <span class="pill">Lesson 1</span>
+            </button>
+            <button class="btn" type="button" id="btnHelp">
+              How to use <span class="pill">Guide</span>
+            </button>
+          </div>
+
+          <div class="footer-note">
+            Tip: Use <span class="kbd">Lessons</span> to read, and <span class="kbd">Quiz</span> to test yourself.
+            Your progress updates instantly (saved for this session in memory).
+          </div>
+        </div>
+
+        <aside class="card hero-side" aria-label="Quick stats">
+          <div class="stat-grid">
+            <div class="stat">
+              <div class="label">Completed</div>
+              <div class="value" id="statCompleted">0 / 5</div>
+            </div>
+            <div class="stat">
+              <div class="label">Quiz Score</div>
+              <div class="value" id="statScore">—</div>
+            </div>
+          </div>
+
+          <div class="progress-wrap">
+            <div class="progress-title">
+              <span>Overall Progress</span>
+              <span id="progressPct" style="font-family:var(--mono);"></span>
+            </div>
+            <div class="bar" aria-label="Progress bar">
+              <i id="progressBar"></i>
+            </div>
+            <div class="footer-note" style="margin-top:10px">
+              Aim for consistent practice. Small progress every day works best.
+            </div>
+          </div>
+
+          <div class="panel" style="padding:12px 12px 14px">
+            <h3 style="margin:0 0 8px;font-size:13px">Today’s Focus</h3>
+            <div class="muted" id="todayFocus" style="font-size:13px;line-height:1.6">
+              —
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="grid">
+        <div class="card section">
+          <h2>Featured Lessons</h2>
+          <div class="lesson-list" id="featuredList" aria-label="Featured lesson list">
+            <!-- injected -->
+          </div>
+        </div>
+
+        <div class="card section">
+          <div class="detail-header">
+            <div class="left">
+              <h2>Quick Practice</h2>
+              <div class="meta">
+                <span class="badge"><i></i> 1-minute speaking</span>
+                <span class="muted">Read → repeat → improve</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="content-area">
+            <div class="panel">
+              <h3>Prompt</h3>
+              <div class="example" id="quickPrompt">
+                “Today, I learned <code id="quickVocab">a new word</code>. I will use it in a sentence.”
+              </div>
+            </div>
+
+            <div class="panel">
+              <h3>Speaking Script (example)</h3>
+              <div class="example" id="quickScript" style="color:rgba(234,240,255,.84)">
+                Step 1: Say the word clearly.<br/>
+                Step 2: Use it in one short sentence.<br/>
+                Step 3: Repeat the sentence once more, slower.
+              </div>
+            </div>
+
+            <div class="quiz-actions">
+              <button class="btn" type="button" id="btnOpenQuiz">
+                Go to Quiz <span class="pill">Practice</span>
+              </button>
+              <div class="toast" id="miniHint">Pick one lesson and start!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LESSONS -->
+    <section class="page" id="page-lessons" aria-label="Lessons page">
+      <div class="grid" style="grid-template-columns: .9fr 1.1fr">
+        <div class="card section">
+          <h2>Lesson List</h2>
+          <div class="lesson-list" id="lessonList" aria-label="All lessons">
+            <!-- injected -->
+          </div>
+          <div class="footer-note">
+            Click a lesson to view vocabulary, a mini-example, and a short quiz.
+          </div>
+        </div>
+
+        <div class="card section">
+          <div class="detail-header">
+            <div class="left">
+              <h2 id="detailTitle">—</h2>
+              <div class="meta">
+                <span class="badge"><i></i> Lesson</span>
+                <span class="muted" id="detailDuration">—</span>
+                <span class="muted" id="detailStatus">—</span>
+              </div>
+            </div>
+            <div>
+              <button class="btn primary" type="button" id="btnMarkDone" title="Mark this lesson as completed">
+                Mark Done <span class="pill">✔</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="content-area">
+            <div class="panel">
+              <h3>Vocabulary</h3>
+              <div class="vocab" id="vocabList">
+                <!-- injected -->
+              </div>
+            </div>
+
+            <div class="panel">
+              <h3>Mini-Example</h3>
+              <div class="example" id="miniExample">
+                —
+              </div>
+            </div>
+
+            <div class="panel" id="lessonQuizPanel">
+              <h3>Lesson Quiz</h3>
+              <div class="quiz-q" id="quizQuestion">—</div>
+              <div class="answers" id="quizAnswers" aria-label="Quiz answers">
+                <!-- injected -->
+              </div>
+
+              <div class="quiz-actions">
+                <button class="btn" type="button" id="btnResetQuiz">
+                  Reset <span class="pill">↺</span>
+                </button>
+                <div class="toast" id="quizToast">Choose an answer.</div>
+              </div>
+              <div class="footer-note">
+                Results will update your progress and overall score.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section class="page" id="page-quiz" aria-label="Quiz page">
+      <div class="grid" style="grid-template-columns: 1fr">
+        <div class="card section">
+          <div class="detail-header">
+            <div class="left">
+              <h2>Master Quiz (All Lessons)</h2>
+              <div class="meta">
+                <span class="badge"><i></i> 5 questions</span>
+                <span class="muted">Single choice</span>
+              </div>
+            </div>
+            <div class="cta-row" style="margin:0">
+              <button class="btn" type="button" id="btnShuffleQuiz">
+                Shuffle <span class="pill">🎲</span>
+              </button>
+              <button class="btn primary" type="button" id="btnRestartQuiz">
+                Restart <span class="pill">⟲</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="quiz-q" id="masterQ">—</div>
+            <div class="answers" id="masterAnswers"></div>
+
+            <div class="quiz-actions">
+              <button class="btn" type="button" id="btnNextQ" disabled>
+                Next <span class="pill">→</span>
+              </button>
+              <div class="toast" id="masterToast">Answer to continue.</div>
+            </div>
+
+            <div class="footer-note" id="masterProgressNote">Question 1 / 5</div>
+          </div>
+
+          <div class="panel" style="margin-top:12px">
+            <h3>Score Summary</h3>
+            <div class="muted" id="scoreSummary" style="line-height:1.65">
+              Complete the quiz to see results.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROFILE / PROGRESS -->
+    <section class="page" id="page-profile" aria-label="Progress page">
+      <div class="grid" style="grid-template-columns: 1fr">
+        <div class="card section">
+          <div class="detail-header">
+            <div class="left">
+              <h2>Your Progress</h2>
+              <div class="meta">
+                <span class="badge"><i></i> In-session</span>
+                <span class="muted">No external storage</span>
+              </div>
+            </div>
+            <div class="cta-row" style="margin:0">
+              <button class="btn" type="button" id="btnClearProgress">
+                Clear <span class="pill">Reset</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="grid" style="grid-template-columns: 0.85fr 1.15fr; margin-top: 8px">
+            <div class="panel">
+              <h3>Lesson Completion</h3>
+              <div id="completionList" class="lesson-list"></div>
+              <div class="footer-note">
+                Mark lessons done in the <b>Lessons</b> page.
+              </div>
+            </div>
+
+            <div class="panel">
+              <h3>Achievements</h3>
+              <div class="muted" style="line-height:1.65" id="achievements">
+                —
+              </div>
+              <div class="footer-note" style="margin-top:12px">
+                Suggested routine: choose one lesson → do the mini-quiz → re-read vocab aloud.
+              </div>
+            </div>
+          </div>
+
+          <div class="panel" style="margin-top:12px">
+            <h3>Overall Score</h3>
+            <div class="muted" id="overallScoreBox" style="line-height:1.65">
+              —
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <div class="modal-head">
+        <h3 id="modalTitle">How to use Peak Ball</h3>
+        <button class="close-x" type="button" id="modalClose" aria-label="Close guide">✕</button>
+      </div>
+      <div class="modal-body">
+        <p>
+          This website helps you learn English with short lessons and quick quizzes.
+          Here’s a simple workflow:
+        </p>
+        <ul>
+          <li><b>Lessons</b>: Read vocabulary and an example, then answer the lesson quiz.</li>
+          <li><b>Quiz</b>: Take the master quiz (5 questions).</li>
+          <li><b>Progress</b>: Track completed lessons and quiz score.</li>
+        </ul>
+        <p>
+          Keyboard tip: you can switch pages using your mouse; the app doesn’t require keyboard shortcuts.
+        </p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn primary" type="button" id="modalOk">
+          Got it <span class="pill">✓</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------------------------
+    // Data (editable)
+    // ---------------------------
+    const LESSONS = [
+      {
+        id: 1,
+        title: "Lesson 1: Daily Routines",
+        duration: "5–7 min",
+        statusHint: "Warm-up vocabulary",
+        vocab: [
+          { word: "routine", meaning: "routine", example: "My morning routine is simple." },
+          { word: "usually", meaning: "usually", example: "I usually study in the evening." },
+          { word: "practice", meaning: "practice", example: "Practice makes progress." }
+        ],
+        miniExample: "Sentence: “I usually practice English in my routine, and it helps me improve.”",
+        quiz: {
+          question: "Choose the best word to complete the sentence: “I ___ study English on weekdays.”",
+          answers: [
+            { text: "usually", correct: true },
+            { text: "yesterday", correct: false },
+            { text: "because", correct: false }
+          ]
+        }
+      },
+      {
+        id: 2,
+        title: "Lesson 2: Asking Questions",
+        duration: "6–8 min",
+        statusHint: "Useful question patterns",
+        vocab: [
+          { word: "wonder", meaning: "想知道", example: "I wonder what time it starts." },
+          { word: "where", meaning: "where", example: "Where do you study English?" },
+          { word: "what", meaning: "what", example: "What do you do on weekends?" }
+        ],
+        miniExample: "Sentence: “Where do you usually practice English, and what do you focus on?”",
+        quiz: {
+          question: "Pick the best question word: “___ do you live?”",
+          answers: [
+            { text: "Where", correct: true },
+            { text: "Because", correct: false },
+            { text: "Usually", correct: false }
+          ]
+        }
+      },
+      {
+        id: 3,
+        title: "Lesson 3: Giving Reasons",
+        duration: "6–9 min",
+        statusHint: "Because / so",
+        vocab: [
+          { word: "because", meaning: "because", example: "I read this book because it’s helpful." },
+          { word: "so", meaning: "so", example: "I practiced a lot, so I improved quickly." },
+          { word: "helpful", meaning: "helpful", example: "This method is very helpful." }
+        ],
+        miniExample: "Sentence: “I study every day because consistency makes learning easier.”",
+        quiz: {
+          question: "Which option correctly uses “because”?",
+          answers: [
+            { text: "I stayed home because it was raining.", correct: true },
+            { text: "Because it was raining, I stay home.", correct: false },
+            { text: "I because study today.", correct: false }
+          ]
+        }
+      },
+      {
+        id: 4,
+        title: "Lesson 4: Comparing",
+        duration: "5–8 min",
+        statusHint: "Better / more / less",
+        vocab: [
+          { word: "better", meaning: "better", example: "This plan is better than the old one." },
+          { word: "more", meaning: "more", example: "I need more practice." },
+          { word: "less", meaning: "less", example: "Try to spend less time scrolling." }
+        ],
+        miniExample: "Sentence: “I want to learn more, but I also want to spend less time on distraction.”",
+        quiz: {
+          question: "Choose the correct sentence:",
+          answers: [
+            { text: "I need more practice.", correct: true },
+            { text: "I need less practice.", correct: false },
+            { text: "I practice more less.", correct: false }
+          ]
+        }
+      },
+      {
+        id: 5,
+        title: "Lesson 5: Making Plans",
+        duration: "6–8 min",
+        statusHint: "Next steps",
+        vocab: [
+          { word: "plan", meaning: "plan", example: "I have a plan for this week." },
+          { word: "goal", meaning: "goal", example: "My goal is to speak for 10 minutes daily." },
+          { word: "tomorrow", meaning: "tomorrow", example: "Tomorrow, I’ll review the lesson again." }
+        ],
+        miniExample: "Sentence: “My goal is to practice tomorrow, and I will keep going even when it’s hard.”",
+        quiz: {
+          question: "What does “goal” mean?",
+          answers: [
+            { text: "A target you want to reach", correct: true },
+            { text: "A place you visit", correct: false },
+            { text: "A feeling you have", correct: false }
+          ]
+        }
+      }
+    ];
+
+    // ---------------------------
+    // State (in-memory)
+    // ---------------------------
+    let selectedLessonId = 1;
+    let completed = new Set();        // lesson ids
+    let lessonQuizCorrect = new Map(); // lesson id -> boolean
+    let masterQuizState = null;
+
+    function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+    // ---------------------------
+    // Utilities
+    // ---------------------------
+    function $(id){ return document.getElementById(id); }
+    function el(tag, attrs={}, children=[]){
+      const node = document.createElement(tag);
+      for(const [k,v] of Object.entries(attrs)){
+        if(k === "class") node.className = v;
+        else if(k === "text") node.textContent = v;
+        else if(k.startsWith("on") && typeof v === "function"){
+          node.addEventListener(k.slice(2), v);
+        } else node.setAttribute(k, v);
+      }
+      for(const child of children){
+        node.appendChild(typeof child === "string" ? document.createTextNode(child) : child);
+      }
+      return node;
+    }
+
+    function setPage(pageKey){
+      const pages = ["home","lessons","quiz","profile"];
+      for(const p of pages){
+        const node = $("page-" + p);
+        if(!node) continue;
+        node.classList.toggle("active", p === pageKey);
+      }
+      // update nav
+      const buttons = document.querySelectorAll(".nav button[data-page]");
+      buttons.forEach(b => b.setAttribute("aria-current", (b.dataset.page === pageKey) ? "page" : "false"));
+    }
+
+    function shuffleArray(arr){
+      const a = [...arr];
+      for(let i=a.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function computeProgress(){
+      const total = LESSONS.length;
+      const doneCount = completed.size;
+      const pct = total === 0 ? 0 : Math.round((doneCount/total)*100);
+      return { total, doneCount, pct };
+    }
+
+    function renderProgress(){
+      const { total, doneCount, pct } = computeProgress();
+      $("statCompleted").textContent = `${doneCount} / ${total}`;
+      $("progressPct").textContent = `${pct}%`;
+      $("progressBar").style.width = pct + "%";
+
+      // quiz score display for home
+      if(masterQuizState && masterQuizState.finished){
+        $("statScore").textContent = `${masterQuizState.score} / ${masterQuizState.questions.length}`;
+      } else if(masterQuizState && typeof masterQuizState.score === "number"){
+        $("statScore").textContent = `${masterQuizState.score} / ${masterQuizState.questions.length}`;
+      } else {
+        $("statScore").textContent = "—";
+      }
+
+      // Today focus
+      const focusLesson = LESSONS.find(l => !completed.has(l.id)) || LESSONS[0];
+      const focusVocab = focusLesson.vocab[0]?.word || "learning";
+      $("todayFocus").textContent =
+        `Try ${focusLesson.title.split(":")[0]} → use “${focusVocab}” in one sentence today.`;
+
+      // profile achievements if on page-profile
+      const profileActive = $("page-profile").classList.contains("active");
+      if(profileActive) renderProfile();
+    }
+
+    function updateQuickPractice(){
+      const lesson = LESSONS.find(l => l.id === selectedLessonId) || LESSONS[0];
+      const vocabWord = lesson.vocab[1]?.word || lesson.vocab[0]?.word || "learning";
+      $("quickVocab").textContent = vocabWord;
+
+      // also keep script more relevant per lesson
+      const exampleWord = lesson.vocab[0]?.word || "a word";
+      $("quickScript").innerHTML =
+        `Step 1: Say “<code>${exampleWord}</code>” clearly.<br/>
+         Step 2: Make one short sentence using it.<br/>
+         Step 3: Repeat your sentence once more, slower.`;
+    }
+
+    // ---------------------------
+    // Lesson rendering
+    // ---------------------------
+    function renderLessonList(){
+      const list = $("lessonList");
+      const featured = $("featuredList");
+      list.innerHTML = "";
+      featured.innerHTML = "";
+
+      LESSONS.forEach((lesson, idx) => {
+        const isSelected = lesson.id === selectedLessonId;
+
+        const done = completed.has(lesson.id);
+        const tagText = done ? "Done" : `Lesson ${lesson.id}`;
+
+        const node = el("div", {
+          class: "lesson",
+          role: "button",
+          tabindex: "0",
+          "aria-selected": isSelected ? "true" : "false",
+          onclick: () => {
+            selectedLessonId = lesson.id;
+            renderLessonList();
+            renderLessonDetail();
+            updateQuickPractice();
+            // if user already picked a master quiz, doesn't change it (fine)
+          },
+          onkeydown: (e) => {
+            if(e.key === "Enter" || e.key === " "){
+              e.preventDefault();
+              selectedLessonId = lesson.id;
+              renderLessonList();
+              renderLessonDetail();
+              updateQuickPractice();
+            }
+          }
+        });
+
+        const top = el("div", { class: "lesson-top" }, []);
+        top.appendChild(el("div", { }, [
+          el("h3", { text: lesson.title })
+        ]));
+        top.appendChild(el("div", { class: "tag", text: tagText }));
+
+        const desc = el("p", {
+          text: lesson.statusHint + " • " + lesson.duration
+        });
+
+        node.appendChild(top);
+        node.appendChild(desc);
+
+        list.appendChild(node);
+
+        // Featured (top 3)
+        if(idx < 3) featured.appendChild(node.cloneNode(true));
+      });
+
+      // Fix aria-selected for featured clones
+      [...featured.children].forEach((child) => {
+        // Determine lesson id from text
+        const h3 = child.querySelector("h3");
+        const match = LESSONS.find(l => l.title === h3?.textContent);
+        if(match) child.setAttribute("aria-selected", match.id === selectedLessonId ? "true" : "false");
+      });
+    }
+
+    function renderLessonDetail(){
+      const lesson = LESSONS.find(l => l.id === selectedLessonId) || LESSONS[0];
+
+      $("detailTitle").textContent = lesson.title;
+      $("detailDuration").textContent = lesson.duration;
+
+      const isDone = completed.has(lesson.id);
+      $("detailStatus").textContent = isDone ? "Status: Completed ✔" : "Status: Not completed";
+
+      $("vocabList").innerHTML = "";
+      lesson.vocab.forEach(v => {
+        const row = el("div", { class: "word" }, [
+          el("div", {}, [
+            el("strong", { text: v.word }),
+            el("div", { class: "ex", text: v.example })
+          ]),
+          el("div", { class: "mean", text: v.meaning })
+        ]);
+        $("vocabList").appendChild(row);
+      });
+
+      $("miniExample").innerHTML = `${escapeHtml(lesson.miniExample).replaceAll("&quot;","“").replaceAll("&#39;","’")}`;
+
+      $("btnMarkDone").textContent = isDone ? "Completed" : "Mark Done";
+      $("btnMarkDone").disabled = isDone;
+      $("btnMarkDone").style.opacity = isDone ? ".7" : "1";
+      $("btnMarkDone").style.cursor = isDone ? "not-allowed" : "pointer";
+
+      renderLessonQuiz(lesson);
+      updateQuickPractice();
+    }
+
+    function escapeHtml(str){
+      return String(str).replace(/[&<>"']/g, (m) => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+      }[m]));
+    }
+
+    function renderLessonQuiz(lesson){
+      $("quizQuestion").textContent = lesson.quiz.question;
+      const answersWrap = $("quizAnswers");
+      answersWrap.innerHTML = "";
+
+      const saved = lessonQuizCorrect.get(lesson.id); // undefined or boolean
+      // We'll allow selection each time; if already answered, we can show state on selection reset.
+      lesson.quiz.answers.forEach((a, idx) => {
+        const node = el("div", {
+          class: "answer",
+          role: "button",
+          tabindex: "0",
+          "data-state": "idle",
+          onclick: () => {
+            // If already answered, allow re-answer after reset? We'll still allow, but overwrite.
+            const correct = !!a.correct;
+            // update state visuals
+            [...answersWrap.children].forEach(ch => ch.removeAttribute("data-state"));
+            // mark each
+            lesson.quiz.answers.forEach((aa, j) => {
+              const ch = answersWrap.children[j];
+              if(!ch) return;
+              if(j === idx){
+                ch.setAttribute("data-state", correct ? "correct" : "wrong");
+              } else {
+                if(aa.correct) ch.setAttribute("data-state", "correct");
+              }
+            });
+
+            lessonQuizCorrect.set(lesson.id, correct);
+            $("quizToast").innerHTML = correct
+              ? `<strong style="color:${getComputedStyle(document.documentElement).getPropertyValue('--ok')}">Correct!</strong> Nice job.`
+              : `<strong style="color:${getComputedStyle(document.documentElement).getPropertyValue('--bad')}">Not quite.</strong> Try again later or reset.`;
+
+            // Optionally, auto-mark lesson completed when correct
+            // We'll do a gentle rule: if correct at least once, keep completed option manual.
+            // But master quiz uses accuracy. This keeps behavior predictable.
+            renderProgress();
+          },
+          onkeydown: (e) => {
+            if(e.key === "Enter" || e.key === " "){
+              e.preventDefault();
+              node.click();
+            }
+          }
+        });
+
+        node.appendChild(el("div", { class: "radio" }));
+        node.appendChild(el("div", { }, [
+          el("div", { style: "font-weight:800;font-size:13px", text: String.fromCharCode(65+idx) + "." }),
+          el("div", { style: "margin-top:2px;color:rgba(234,240,255,.88)", text: a.text })
+        ]));
+
+        answersWrap.appendChild(node);
+      });
+
+      $("quizToast").textContent = saved === true ? "Previously correct. You can still practice." : (saved === false ? "Previously incorrect. Reset and try again." : "Choose an answer.");
+      $("btnResetQuiz").onclick = () => {
+        [...answersWrap.children].forEach(ch => ch.removeAttribute("data-state"));
+        $("quizToast").textContent = "Choose an answer.";
+      };
+    }
+
+    // ---------------------------
+    // Master Quiz page
+    // ---------------------------
+    function initMasterQuiz(){
+      const questions = shuffleArray(LESSONS.map(l => ({
+        lessonId: l.id,
+        lessonTitle: l.title,
+        question: l.quiz.question,
+        answers: shuffleArray(l.quiz.answers.map(a => ({ text: a.text, correct: a.correct })))
+      })));
+
+      masterQuizState = {
+        questions,
+        index: 0,
+        score: 0,
+        finished: false,
+        // track per question
+        correctness: new Map() // idx -> boolean
+      };
+
+      $("masterProgressNote").textContent = `Question 1 / ${questions.length}`;
+      $("scoreSummary").textContent = "Complete the quiz to see results.";
+      renderMasterQuestion();
+    }
+
+    function renderMasterQuestion(){
+      const q = masterQuizState.questions[masterQuizState.index];
+      $("masterQ").textContent = q.question;
+
+      const wrap = $("masterAnswers");
+      wrap.innerHTML = "";
+
+      q.answers.forEach((a, idx) => {
+        const node = el("div", {
+          class: "answer",
+          role: "button",
+          tabindex: "0",
+          onclick: () => selectMasterAnswer(idx),
+          onkeydown: (e) => {
+            if(e.key === "Enter" || e.key === " "){
+              e.preventDefault();
+              node.click();
+            }
+          }
+        });
+
+        node.appendChild(el("div", { class: "radio" }));
+        node.appendChild(el("div", {}, [
+          el("div", { style: "font-weight:800;font-size:13px", text: String.fromCharCode(65+idx) + "." }),
+          el("div", { style: "margin-top:2px;color:rgba(234,240,255,.88)", text: a.text })
+        ]));
+        wrap.appendChild(node);
+      });
+
+      $("btnNextQ").disabled = true;
+      $("masterToast").textContent = "Answer to continue.";
+    }
+
+    function selectMasterAnswer(answerIndex){
+      const q = masterQuizState.questions[masterQuizState.index];
+      const chosen = q.answers[answerIndex];
+      const correct = !!chosen.correct;
+
+      // freeze UI + show result
+      const wrap = $("masterAnswers");
+      [...wrap.children].forEach((ch, i) => {
+        ch.style.pointerEvents = "none";
+        if(q.answers[i].correct) ch.setAttribute("data-state","correct");
+        else if(i === answerIndex) ch.setAttribute("data-state","wrong");
+      });
+
+      masterQuizState.correctness.set(masterQuizState.index, correct);
+      masterQuizState.score += correct ? 1 : 0;
+
+      $("masterToast").innerHTML = correct
+        ? `<strong style="color:${getComputedStyle(document.documentElement).getPropertyValue('--ok')}">Correct!</strong>`
+        : `<strong style="color:${getComputedStyle(document.documentElement).getPropertyValue('--bad')}">Wrong.</strong>`;
+
+      $("btnNextQ").disabled = false;
+      $("btnNextQ").onclick = goNextMasterQuestion;
+    }
+
+    function goNextMasterQuestion(){
+      const total = masterQuizState.questions.length;
+      const isLast = masterQuizState.index >= total - 1;
+      if(isLast){
+        masterQuizState.finished = true;
+        $("btnNextQ").disabled = true;
+        renderMasterSummary();
+        renderProgress(); // updates home stat score
+        return;
+      }
+      masterQuizState.index += 1;
+      $("masterProgressNote").textContent = `Question ${masterQuizState.index + 1} / ${total}`;
+      renderMasterQuestion();
+    }
+
+    function renderMasterSummary(){
+      const total = masterQuizState.questions.length;
+      const score = masterQuizState.score;
+      const pct = Math.round((score/total)*100);
+
+      const details = masterQuizState.questions.map((q, idx) => {
+        const correct = masterQuizState.correctness.get(idx);
+        const status = correct ? "Correct" : "Wrong";
+        return `${idx+1}. ${status} — ${q.lessonTitle}`;
+      });
+
+      $("scoreSummary").innerHTML =
+        `<b>${score} / ${total}</b> (${pct}%).<br/><br/>` +
+        details.map(s => `<div style="margin:6px 0;color:rgba(234,240,255,.82)">${escapeHtml(s).replace(/—/g,'—')}</div>`).join("");
+
+      $("masterToast").textContent = "Quiz finished! Great work.";
+      $("masterProgressNote").textContent = `Finished — ${score} / ${total}`;
+    }
+
+    // ---------------------------
+    // Profile rendering
+    // ---------------------------
+    function renderProfile(){
+      const total = LESSONS.length;
+
+      $("completionList").innerHTML = "";
+      LESSONS.forEach(l => {
+        const done = completed.has(l.id);
+        const correct = lessonQuizCorrect.get(l.id);
+
+        const item = el("div", { class: "lesson", "aria-selected": "false", style: "cursor:default" }, []);
+        const top = el("div", { class: "lesson-top" }, []);
+        const left = el("div", {}, [ el("h3", { text: l.title }) ]);
+        const tagColor = done ? "rgba(34,197,94,.75)" : "rgba(255,255,255,.18)";
+        const tag = el("div", { class: "tag", text: done ? "Done" : `Lesson ${l.id}` });
+        tag.style.borderColor = tagColor;
+        if(done) tag.style.background = "rgba(34,197,94,.10)";
+
+        top.appendChild(left);
+        top.appendChild(tag);
+
+        const p = el("p", { text: `Quiz: ${correct === undefined ? "—" : (correct ? "Correct" : "Incorrect")}` });
+        item.appendChild(top);
+        item.appendChild(p);
+
+        $("completionList").appendChild(item);
+      });
+
+      // Achievements
+      const doneCount = completed.size;
+      const quizAnswered = [...lessonQuizCorrect.values()].filter(v => v !== undefined).length;
+      const correctCount = [...lessonQuizCorrect.values()].filter(v => v === true).length;
+
+      const masterScore = (masterQuizState && masterQuizState.finished) ? masterQuizState.score : null;
+
+      let badgeList = [];
+      if(doneCount === 0) badgeList.push("Start your first lesson to begin your streak.");
+      if(doneCount >= 1) badgeList.push("Nice! You completed at least one lesson.");
+      if(doneCount >= 3) badgeList.push("Great progress: 3+ lessons completed.");
+      if(doneCount >= 5) badgeList.push("Perfect: you completed all lessons. 🎉");
+
+      if(quizAnswered > 0){
+        const avg = Math.round((correctCount / quizAnswered) * 100);
+        badgeList.push(`Lesson quiz accuracy: ${avg}%`);
+      } else {
+        badgeList.push("Answer a lesson quiz to unlock accuracy stats.");
+      }
+
+      if(masterScore !== null){
+        badgeList.push(`Master quiz score: ${masterScore} / ${LESSONS.length}`);
+      }
+
+      $("achievements").innerHTML = badgeList.map(s => `<div style="margin:8px 0">• ${escapeHtml(s)}</div>`).join("");
+
+      // Overall score box
+      const totalQuestions = LESSONS.length;
+      const lessonAccuracy = (() => {
+        const entries = [...lessonQuizCorrect.entries()].filter(([_,v]) => v !== undefined);
+        if(entries.length === 0) return null;
+        const correct = entries.filter(([_,v]) => v === true).length;
+        return { correct, answered: entries.length, pct: Math.round((correct/entries.length)*100) };
+      })();
+
+      let overall = [];
+      if(lessonAccuracy){
+        overall.push(`<div><b>Lesson quiz:</b> ${lessonAccuracy.correct}/${lessonAccuracy.answered} (${lessonAccuracy.pct}%)</div>`);
+      } else {
+        overall.push(`<div><b>Lesson quiz:</b> Not answered yet.</div>`);
+      }
+
+      if(masterQuizState){
+        if(masterQuizState.finished){
+          overall.push(`<div><b>Master quiz:</b> ${masterQuizState.score}/${totalQuestions}</div>`);
+        } else {
+          overall.push(`<div><b>Master quiz:</b> In progress</div>`);
+        }
+      } else {
+        overall.push(`<div><b>Master quiz:</b> Not started</div>`);
+      }
+
+      $("overallScoreBox").innerHTML = overall.join("");
+    }
+
+    // ---------------------------
+    // Wire up UI
+    // ---------------------------
+    function init(){
+      renderLessonList();
+      renderLessonDetail();
+      renderProgress();
+      updateQuickPractice();
+      renderProfile();
+
+      // nav buttons
+      document.querySelectorAll(".nav button[data-page]').forEach(btn => {
+        btn.addEventListener("click", () => setPage(btn.dataset.page));
+      });
+
+      // start lesson
+      $("btnStart").addEventListener("click", () => {
+        selectedLessonId = 1;
+        setPage("lessons");
+        renderLessonList();
+        renderLessonDetail();
+        updateQuickPractice();
+      });
+
+      // open help modal
+      $("btnHelp").addEventListener("click", () => {
+        $("modalBackdrop").classList.add("show");
+      });
+
+      $("modalClose").addEventListener("click", () => $("modalBackdrop").classList.remove("show"));
+      $("modalOk").addEventListener("click", () => $("modalBackdrop").classList.remove("show"));
+      $("modalBackdrop").addEventListener("click", (e) => {
+        if(e.target === $("modalBackdrop")) $("modalBackdrop").classList.remove("show");
+      });
+      document.addEventListener("keydown", (e) => {
+        if(e.key === "Escape") $("modalBackdrop").classList.remove("show");
+      });
+
+      $("btnOpenQuiz").addEventListener("click", () => {
+        setPage("quiz");
+        if(!masterQuizState) initMasterQuiz();
+      });
+
+      $("btnMarkDone").addEventListener("click", () => {
+        completed.add(selectedLessonId);
+        renderLessonList();
+        renderLessonDetail();
+        renderProgress();
+        renderProfile();
+
+        // friendly toast replacement
+        const lesson = LESSONS.find(l => l.id === selectedLessonId);
+        $("miniHint").innerHTML = `Great! "${lesson.title}" marked as completed.`;
+      });
+
+      $("btnResetQuiz").addEventListener("click", () => {
+        renderLessonDetail(); // re-render resets quiz visuals
+      });
+
+      // Master quiz controls
+      $("btnShuffleQuiz").addEventListener("click", () => {
+        initMasterQuiz();
+      });
+
+      $("btnRestartQuiz").addEventListener("click", () => {
+        initMasterQuiz();
+      });
+
+      $("btnNextQ").addEventListener("click", () => goNextMasterQuestion());
+
+      // Clear progress
+      $("btnClearProgress").addEventListener("click", () => {
+        completed = new Set();
+        lessonQuizCorrect = new Map();
+        masterQuizState = null;
+
+        selectedLessonId = 1;
+        renderLessonList();
+        renderLessonDetail();
+        renderProgress();
+        renderProfile();
+        $("statScore").textContent = "—";
+        $("scoreSummary").textContent = "Complete the quiz to see results.";
+        setPage("home");
+      });
+
+      // If user enters quiz page and no state exists, init it
+      const quizPageObserver = new MutationObserver(() => {
+        const quizActive = $("page-quiz").classList.contains("active");
+        if(quizActive && !masterQuizState) initMasterQuiz();
+      });
+      quizPageObserver.observe(document.body, { attributes: true, subtree: true, attributeFilter: ["class"] });
+    }
+
+    init();
+  </script>
+</body>
+</html>
